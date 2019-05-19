@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block maincontent %}
+{% load staticfiles %}
+
+ <div class="container" style="text-align:center;">
+                     <div style="width:100%;padding: 2em; box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.18); -moz-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.18); -webkit-box-shadow:  0px 0px 12px rgba(0, 0, 0, 0.18);background-color: #fff">
+
+
+                    {% if request.user.is_authenticated %}
+                    <h1><b>Your Diet Plan<a href="{% url 'user_profile' %}">Set your daily Routine</a></b></h1>
+                     <div class="container-fluid">
+                        <div class="card">
+                            <span class="input-group-addon"><b>Diet Schedule</b></span>
+                            <br>
+                            <div class="card-body" class="col-md-12">
+
+                                <form action="{% url 'add_food' %}" method="POST" class="form-horizontal">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" value="{{user.id}}">
+                                    <div class="form-group">
+                                          <label class="col-md-4 control-label" for="client-email">Food Name</label>
+                                          <div class="col-md-4">
+                                            <div class="input-group">
+                                              <span class="input-group-addon"><i class='fas fa-drumstick-bite'></i></span>
+                                              <input  name="food_name" class="form-control" placeholder="Enter Food Name" type="text" required>
+                                            </div>
+                                            <p class="help-block">Enter Food Name of your Routine</p>
+                                          </div>
+                                        </div>
+                                    <div class="form-group">
+                                          <label class="col-md-4 control-label" for="client-email">Date</label>
+                                          <div class="col-md-4">
+                                            <div class="input-group">
+                                              <span class="input-group-addon"><i class='fas fa-calendar-check'></i></span>
+                                              <input  name="DateTaker" class="form-control" placeholder="Enter Date" type="date" required>
+                                            </div>
+                                            <p class="help-block">Enter Date form You Start</p>
+                                          </div>
+                                        </div>
+                                     <div class="form-group">
+                                          <label class="col-md-4 control-label" for="client-email">Time</label>
+                                          <div class="col-md-4">
+                                            <div class="input-group">
+                                              <span class="input-group-addon"><i class='fas fa-clock'></i></span>
+                                              <input  name="TimeTaker" class="form-control" placeholder="Enter Time" type="time" required>
+                                            </div>
+                                            <p class="help-block">Enter Time of every FoodSchedule</p>
+                                          </div>
+                                        </div>
+                                   <div class="form-group">
+                                      <label class="col-md-4 control-label" ></label>
+                                      <div class="col-md-4">
+                                        <button name="btn btn-success" type="submit" style="width:50%" class="btn btn-success">Save</button>
+                                      </div>
+                                   </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-responsive ">
+                <table class="table">
+                    <thead class="thead-dark" style="background:#000">
+                        <tr>
+                            <th scope="col">S.No.</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">From Date</th>
+                            <th scope="col">Time</th>
+                            <th scope="col" style="color: red;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Action</th>
+                        </tr>
+                    </thead>
+                    {% for schedule in schedule %}
+                    <tr>
+                        <td scope="col">{{schedule.id}}</td>
+                        <td scope="col">{{schedule.food_name}}</td>
+                        <td scope="col">{{schedule.DateTaker}}</td>
+                        <td scope="col">{{schedule.TimeTaker}}</td>
+                        <td>
+                             <a href="#editEmployeeModal" class="edit" data-mytitle="{{schedule.food_name}}"  data-mystart="{{schedule.DateTaker}}" data-myend="{{schedule.TimeTaker}}" data-myeveid = "{{schedule.id}}" data-toggle="modal"><button class="btn btn-info">Edit</button></a>&nbsp;&nbsp;
+                            <a href="/delete/{{ schedule.id }}"  data-toggle="modal"><button class="btn btn-danger">Delete</button></a>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--edit Schedule modal-->
+
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{% url 'edit' %}" method="POST" >
+                {% csrf_token %}
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Edit Food Schedule</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <input type="text" class="form-control" name="id" id="id" required>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Food Name</label>
+                        <input type="text" class="form-control" name="foodname" id="food" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="form-control" name="date" id="date"  required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" class="form-control" name="time" id="time"  required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-info" value="Save">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+         {% else %}
+                     <div class="content flex-center position-ref full-height">
+                <div class="title m-b-md">
+                    <img src="{% static 'images/diet.jpg' %}" style="border-radius:5px;" width="100%" height="100%"><br>
+                    <h4> Diet Management please <a href="{% url 'user_registration' %}">register here</a> and then checkout</h4>
+                    {% endif %}
+                </div>
+                     </div>
+                </div>
+ </div>
+<script type="text/javascript">
+$('#editEmployeeModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var title = button.data('mytitle')
+    var start = button.data('mystart')
+    var end = button.data('myend')
+    var eveid = button.data('myeveid')
+    var userId = button.data('myuserId')
+    var modal = $(this)
+
+    modal.find('.modal-body #food').val(title)
+    modal.find('.modal-body #date').val(start)
+    modal.find('.modal-body #time').val(end)
+    modal.find('.modal-body #id').val(eveid)
+    modal.find('.modal-body #userId').val(userId)
+})
+</script>
+{% endblock maincontent %}

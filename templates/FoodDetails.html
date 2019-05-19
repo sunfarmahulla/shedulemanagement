@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block maincontent %}
+{% load staticfiles %}
+<div class="container-fluid" class="col-md-12">
+    <h3 style="text-align:center">Choose best Diet Schedule</h3>
+    <form action="{% url 'foodData' %}" method="POST" class="form-horizontal">
+                                    {% csrf_token %}
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="client-email">Gender</label>
+                                          <div class="col-md-4">
+                                            <div class="input-group">
+                                              <span class="input-group-addon"><i class='fas fa-drumstick-bite'></i></span>
+                                              <select class="form-control" name="gender">
+                                                  <option value="male">male</option>
+                                                  <option value="female">Female</option>
+                                              </select>
+                                            </div>
+                                            <p class="help-block">Select Gender</p>
+                                          </div>
+                                        </div>
+                                    <div class="form-group">
+                                          <label class="col-md-4 control-label" for="client-email"> Age</label>
+                                          <div class="col-md-4">
+                                            <div class="input-group">
+                                              <span class="input-group-addon"><i class='fas fa-calendar-check'></i></span>
+                                              <select name="age" class="form-control">
+                                                  <option value="0-3">0-3</option>
+                                                  <option value="3-5">3-5</option>
+                                                  <option value="5-10">5-10</option>
+                                                  <option value="10-12">10-12</option>
+                                                  <option value="13-19">13-19</option>
+                                                  <option value="20-30">20-30</option>
+                                                  <option value="30-40">30-40</option>
+                                                  <option value="40-50">40-50</option>
+                                                  <option value="50-70">50-70</option>
+                                                  <option value="70-80">70-80</option>
+                                                  <option value="above80">above 80</option>
+                                              </select>
+                                            </div>
+                                            <p class="help-block">Select Age</p>
+                                          </div>
+                                        </div>
+
+                                   <div class="form-group">
+                                      <label class="col-md-4 control-label" ></label>
+                                      <div class="col-md-4">
+                                     <center> <button name="btn btn-success" type="submit" style="width:50%" class="btn btn-success">Search</button>
+                                         </center>
+                                      </div>
+                                   </div>
+
+                                </form>
+
+</div>
+<h3 style="text-align:center">List Of Better Schedule</h3>
+<div class="container">
+    <div style="width:100%;padding: 2em; box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.18); -moz-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.18); -webkit-box-shadow:  0px 0px 12px rgba(0, 0, 0, 0.18);background-color: #fff">
+
+{% for details in details %}
+        <h3 style="text-align:center"><u>Age({{ details.age }})</u></h3>
+        <div class="card">
+            <div class="card-body" style="">
+        <p>{{ details.details | safe }}</p>
+            </div>
+        </div>
+
+{% endfor %}
+    </div>
+
+</div>
+
+
+
+{% endblock maincontent %}
